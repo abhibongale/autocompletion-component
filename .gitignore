@@ -1,0 +1,7 @@
+# frontend folder
+frontend/node_modules
+frontend/package-lock.json
+
+# backend folder
+backend/node_modules
+backend/package-lock.json
