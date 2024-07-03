@@ -1,0 +1,8 @@
+{
+    "scripts": {
+        "start": "concurrently \"npm run start:node\" \"npm run start:react\"",
+        "start:node": "node server.js",  
+        "start:react": "react-scripts start"
+}
+  }
+  
