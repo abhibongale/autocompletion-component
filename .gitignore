@@ -5,3 +5,7 @@ frontend/package-lock.json
 # backend folder
 backend/node_modules
 backend/package-lock.json
+
+# node modules
+node_modules
+package-lock.json
