@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../assets/css/SongSearch.css'; // Import CSS file for styles
+import Suggestions from './Suggestions';
 import Heading from './Heading';
 import FilterSection from './FilterSection';
+import SearchInput from './SearchInput';
 import Container from '@mui/material/Container';
 
 
@@ -13,6 +15,7 @@ const SongSearch = () => {
   // State variables for managing query, error, search results, and filters
   const [query, setQuery] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [filters, setFilters] = useState({
     artistName: true,
@@ -41,6 +44,7 @@ const SongSearch = () => {
   // Function to handle search based on selected filters
   const handleSearch = async () => {
     try {
+      setLoading(true);
       const params = {}
 
       // Add parameters based on active filters
@@ -55,6 +59,8 @@ const SongSearch = () => {
       console.error('Error searching songs:', error);
       setSearchResults([]); // Clear previous results on error
       setError('An error occurred while searching songs.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,52 +75,10 @@ const SongSearch = () => {
   return (
     <Container maxWidth={false} disableGutters>
       <Heading/>
-      <div className="search-input">
-        <label>Search: </label>
-        <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
-      </div>
+      <SearchInput query={query} setQuery={setQuery}/>
       <FilterSection filters = {filters} handleFilterChange = {handleFilterChange} />
       {error && <p className="error-message">{error}</p>}
-      <div className="search-results">
-        <h2>Suggestion:</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Artist Name</th>
-              <th>Album Name</th>
-              <th>Title</th>
-              <th>Length</th>
-              <th>Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            {searchResults.map((song, index) => (
-              <React.Fragment key={index}>
-                <tr>
-                  <td>{song.artist}</td>
-                  <td>{song.album}</td>
-                  <td>{song.title}</td>
-                  <td>{song.length}</td>
-                  <td>
-                    <button onClick={() => toggleDetails(index)}>
-                      {song.expanded ? 'Hide Details' : 'Show Details'}
-                    </button>
-                  </td>
-                </tr>
-                {song.expanded && (
-                  <tr className="details-row">
-                    <td colSpan="6">
-                      <div className="details">
-                        <p><strong>Description:</strong> {song.description}</p>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Suggestions searchResults={searchResults} loading={loading} toggleDetails={toggleDetails}/>
     </Container>
   );
 };

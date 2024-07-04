@@ -12,8 +12,7 @@ const envPath = path.resolve(__dirname, '../../../.env');
 dotenv.config({ path: envPath });
 
 const config = {
-  port: process.env.NODE_PORT || 3000,
-  filePath: process.env.SONGS_FILE_PATH
+  port: process.env.REACT_APP || 3000,
 };
 
 export default config;
